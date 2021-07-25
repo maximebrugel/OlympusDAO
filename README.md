@@ -1,6 +1,6 @@
 # OlympusDAO
 
-A readable version of OlympusDAO smart contracts.
+A readable version of OlympusDAO smart contracts with Hardhat.
 
 You can find the original repository here, with **flatten** contracts => https://github.com/OlympusDAO/olympus-contracts
 
