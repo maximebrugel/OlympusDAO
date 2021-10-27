@@ -5,7 +5,7 @@ pragma solidity 0.8.0;
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "./libraries/FixedPoint.sol";
 import "./libraries/SafeMath.sol";
-import "./interfaces/IUniswapV2Pair.sol";
+import "./interfaces/external/IUniswapV2Pair.sol";
 import "./interfaces/IBondCalculator.sol";
 import "./interfaces/IOHM.sol";
 
