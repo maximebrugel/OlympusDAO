@@ -8,10 +8,10 @@ import "./interfaces/IStakingHelper.sol";
 import "./interfaces/IBondCalculator.sol";
 import "./interfaces/IStaking.sol";
 import "./interfaces/ITreasury.sol";
+import "./interfaces/IOHM.sol";
 import "./libraries/FixedPoint.sol";
 import "./libraries/FullMath.sol";
 import "./Policy.sol";
-import "./tokens/IERC20OHM.sol";
 
 contract OlympusBondDepository is Policy {
     using FixedPoint for *;
@@ -415,7 +415,7 @@ contract OlympusBondDepository is Policy {
         if (isLiquidityBond) {
             price_ = bondPrice().mul(IBondCalculator(bondCalculator).markdown(principle)).div(100);
         } else {
-            price_ = bondPrice().mul(10**IERC20OHM(principle).decimals()).div(100);
+            price_ = bondPrice().mul(10**IOHM(principle).decimals()).div(100);
         }
     }
 

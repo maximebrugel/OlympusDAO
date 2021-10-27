@@ -7,7 +7,7 @@ import "./libraries/FixedPoint.sol";
 import "./libraries/SafeMath.sol";
 import "./interfaces/IUniswapV2Pair.sol";
 import "./interfaces/IBondCalculator.sol";
-import "./tokens/IERC20OHM.sol";
+import "./interfaces/IOHM.sol";
 
 contract OlympusBondingCalculator is IBondCalculator {
     using FixedPoint for *;
@@ -22,9 +22,9 @@ contract OlympusBondingCalculator is IBondCalculator {
     }
 
     function getKValue(address _pair) public view returns (uint256 k_) {
-        uint256 token0 = IERC20OHM(IUniswapV2Pair(_pair).token0()).decimals();
-        uint256 token1 = IERC20OHM(IUniswapV2Pair(_pair).token1()).decimals();
-        uint256 decimals = token0.add(token1).sub(IERC20OHM(_pair).decimals());
+        uint256 token0 = IOHM(IUniswapV2Pair(_pair).token0()).decimals();
+        uint256 token1 = IOHM(IUniswapV2Pair(_pair).token1()).decimals();
+        uint256 decimals = token0.add(token1).sub(IOHM(_pair).decimals());
 
         (uint256 reserve0, uint256 reserve1, ) = IUniswapV2Pair(_pair).getReserves();
         k_ = reserve0.mul(reserve1).div(10**decimals);
@@ -50,6 +50,6 @@ contract OlympusBondingCalculator is IBondCalculator {
         } else {
             reserve = reserve0;
         }
-        return reserve.mul(2 * (10**IERC20OHM(OHM).decimals())).div(getTotalValue(_pair));
+        return reserve.mul(2 * (10**IOHM(OHM).decimals())).div(getTotalValue(_pair));
     }
 }

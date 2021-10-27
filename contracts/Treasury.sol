@@ -6,9 +6,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "./interfaces/IBondCalculator.sol";
-import "./interfaces/IOHMERC20.sol";
-import "./interfaces/IERC20Mintable.sol";
-import "./tokens/IERC20OHM.sol";
+import "./interfaces/IOHM.sol";
 
 contract OlympusTreasury is Ownable {
     using SafeMath for uint256;
@@ -128,7 +126,7 @@ contract OlympusTreasury is Ownable {
         uint256 value = valueOf(_token, _amount);
         // mint OHM needed and store amount of rewards for distribution
         send_ = value.sub(_profit);
-        IERC20Mintable(OHM).mint(msg.sender, send_);
+        IOHM(OHM).mint(msg.sender, send_);
 
         totalReserves = totalReserves.add(value);
         emit ReservesUpdated(totalReserves);
@@ -146,7 +144,7 @@ contract OlympusTreasury is Ownable {
         require(isReserveSpender[msg.sender] == true, "Not approved");
 
         uint256 value = valueOf(_token, _amount);
-        IOHMERC20(OHM).burnFrom(msg.sender, value);
+        IOHM(OHM).burnFrom(msg.sender, value);
 
         totalReserves = totalReserves.sub(value);
         emit ReservesUpdated(totalReserves);
@@ -210,7 +208,7 @@ contract OlympusTreasury is Ownable {
     function repayDebtWithOHM(uint256 _amount) external {
         require(isDebtor[msg.sender], "Not approved");
 
-        IOHMERC20(OHM).burnFrom(msg.sender, _amount);
+        IOHM(OHM).burnFrom(msg.sender, _amount);
 
         debtorBalance[msg.sender] = debtorBalance[msg.sender].sub(_amount);
         totalDebt = totalDebt.sub(_amount);
@@ -248,7 +246,7 @@ contract OlympusTreasury is Ownable {
         require(isRewardManager[msg.sender], "Not approved");
         require(_amount <= excessReserves(), "Insufficient reserves");
 
-        IERC20Mintable(OHM).mint(_recipient, _amount);
+        IOHM(OHM).mint(_recipient, _amount);
 
         emit RewardsMinted(msg.sender, _recipient, _amount);
     }
@@ -287,7 +285,7 @@ contract OlympusTreasury is Ownable {
     function valueOf(address _token, uint256 _amount) public view returns (uint256 value_) {
         if (isReserveToken[_token]) {
             // convert amount to match OHM decimals
-            value_ = _amount.mul(10**IERC20OHM(OHM).decimals()).div(10**IERC20OHM(_token).decimals());
+            value_ = _amount.mul(10**IOHM(OHM).decimals()).div(10**IOHM(_token).decimals());
         } else if (isLiquidityToken[_token]) {
             value_ = IBondCalculator(bondCalculator[_token]).valuation(_token, _amount);
         }

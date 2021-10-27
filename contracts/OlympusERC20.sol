@@ -4,7 +4,7 @@ pragma solidity 0.8.0;
 
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import "./ERC20Permit/ERC20Permit.sol";
-import "../VaultOwned.sol";
+import "./VaultOwned.sol";
 
 contract OlympusERC20Token is ERC20Permit, VaultOwned {
     using SafeMath for uint256;
